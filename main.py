@@ -170,3 +170,10 @@ if st.button("Guardar respuestas"):
     df.to_csv("respuestas_cuestionario.csv", mode='a', header=False, index=False)
     st.success("Respuestas guardadas en 'respuestas_cuestionario.csv'")
 
+    # Botón de descarga
+    st.download_button(
+        label="📥 Descargar respuestas como CSV",
+        data=csv,
+        file_name='respuestas_cuestionario.csv',
+        mime='text/csv'
+    )
