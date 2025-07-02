@@ -312,3 +312,123 @@ st.download_button(
     file_name="respuestas_cuestionario.pdf",
     mime="application/pdf"
 )
+
+
+
+import pandas as pd
+
+# ---------------------------------------
+# Interpretación de IAS (ejemplo simple)
+# ---------------------------------------
+
+ias_analisis = []
+
+for pregunta, respuesta in ias_respuestas.items():
+    # Valor base de interpretación y recomendación
+    analisis = ""
+    recomendacion = ""
+
+    if "cereales" in pregunta.lower():
+        if respuesta == "Diario":
+            analisis = "Consumo adecuado de energía. Revisar tipo de cereal."
+            recomendacion = "Preferir integrales, moderar porciones."
+        elif respuesta in ["3 o más veces a la semana pero no diario", "1 o 2 veces a la semana"]:
+            analisis = "Consumo bajo."
+            recomendacion = "Aumentar cereales saludables."
+        else:
+            analisis = "Consumo muy bajo."
+            recomendacion = "Incluir cereales integrales en la dieta."
+
+    elif "verduras" in pregunta.lower():
+        if respuesta == "Diario":
+            analisis = "Excelente consumo de verduras."
+            recomendacion = "Mantener variedad."
+        elif respuesta in ["3 o más veces a la semana pero no diario"]:
+            analisis = "Consumo bueno pero no diario."
+            recomendacion = "Aumentar frecuencia a diario."
+        else:
+            analisis = "Bajo consumo."
+            recomendacion = "Incrementar verduras frescas."
+
+    elif "frutas" in pregunta.lower():
+        if respuesta == "Diario":
+            analisis = "Buen aporte de vitaminas."
+            recomendacion = "Mantener sin excesos de jugos."
+        else:
+            analisis = "Poca ingesta de fruta fresca."
+            recomendacion = "Agregar fruta entera diariamente."
+
+    elif "embutidos" in pregunta.lower():
+        if respuesta == "Diario":
+            analisis = "Consumo alto de carnes procesadas."
+            recomendacion = "Reducir drásticamente por sodio y grasa."
+        elif respuesta in ["3 o más veces a la semana pero no diario"]:
+            analisis = "Consumo frecuente."
+            recomendacion = "Limitar embutidos a esporádico."
+        else:
+            analisis = "Consumo bajo de procesados."
+            recomendacion = "Mantener este hábito."
+
+    else:
+        analisis = "Verificar coherencia."
+        recomendacion = "Ajustar si es necesario."
+
+    ias_analisis.append({
+        "Pregunta": pregunta,
+        "Respuesta": respuesta,
+        "Análisis": analisis,
+        "Recomendación": recomendacion
+    })
+
+# ---------------------------------------
+# Interpretación de Edulcorantes
+# ---------------------------------------
+
+edulcorantes_analisis = []
+
+for pregunta, respuesta in edulcorantes_respuestas.items():
+    if respuesta == "Diario":
+        analisis = "Uso diario de edulcorantes en este producto."
+        recomendacion = "Verificar tolerancia, ajustar si es excesivo."
+    elif respuesta == "Al menos 1 vez a la semana pero no diario":
+        analisis = "Consumo regular moderado."
+        recomendacion = "Ok, mantener o reducir si se prefiere natural."
+    elif respuesta == "Al menos 1 vez al mes pero no todas las semanas":
+        analisis = "Consumo ocasional."
+        recomendacion = "Sin problema."
+    else:
+        analisis = "No usa este tipo de producto."
+        recomendacion = "Sin implicaciones."
+
+    edulcorantes_analisis.append({
+        "Pregunta": pregunta,
+        "Respuesta": respuesta,
+        "Análisis": analisis,
+        "Recomendación": recomendacion
+    })
+
+# ---------------------------------------
+# Unir en DataFrames y mostrar
+# ---------------------------------------
+
+df_ias = pd.DataFrame(ias_analisis)
+df_edulcorantes = pd.DataFrame(edulcorantes_analisis)
+
+st.subheader("🔍 Análisis de respuestas IAS")
+st.dataframe(df_ias)
+
+st.subheader("🔍 Análisis de respuestas Edulcorantes")
+st.dataframe(df_edulcorantes)
+
+# ---------------------------------------
+# Descargar como CSV interpretativo
+# ---------------------------------------
+
+csv_analisis = pd.concat([df_ias, df_edulcorantes], keys=['IAS', 'Edulcorantes']).to_csv(index=False).encode('utf-8')
+
+st.download_button(
+    label="📥 Descargar análisis interpretativo (CSV)",
+    data=csv_analisis,
+    file_name="analisis_respuestas_individual.csv",
+    mime="text/csv"
+)
