@@ -442,6 +442,56 @@ except:
     pass
 
 
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# ------------------------------------------
+# Genera gráfico radar para IAS
+# ------------------------------------------
+
+# Puntos por grupo
+ias_puntos_por_pregunta = []
+for pregunta, puntos in ias_preguntas.items():
+    respuesta = ias_respuestas[pregunta]
+    idx = opciones.index(respuesta)
+    ias_puntos_por_pregunta.append(puntos[idx])
+
+# Etiquetas
+ias_labels = [
+    "Cereales", "Verduras", "Frutas",
+    "Lácteos", "Carnes", "Leguminosas",
+    "Embutidos", "Postres", "Refrescos"
+]
+
+# Cierra el círculo
+values = ias_puntos_por_pregunta + [ias_puntos_por_pregunta[0]]
+labels = ias_labels + [ias_labels[0]]
+num_vars = len(labels)
+
+# Ángulos
+angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
+values += values[:1]
+angles += angles[:1]
+
+# Plot
+fig_radar, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
+ax.fill(angles, values, color='skyblue', alpha=0.4)
+ax.plot(angles, values, color='blue', linewidth=2)
+
+ax.set_yticks([2, 4, 6, 8, 10])
+ax.set_yticklabels(['2', '4', '6', '8', '10'])
+ax.set_xticks(angles[:-1])
+ax.set_xticklabels(ias_labels)
+ax.set_title('Perfil de consumo IAS (Radar)', size=14)
+
+st.pyplot(fig_radar)
+
+# Guarda para PDF
+fig_radar.savefig('ias_radar.png', bbox_inches='tight')
+
+
+
 from fpdf import FPDF
 from io import BytesIO
 import datetime
@@ -499,6 +549,14 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
     except Exception as e:
         print("No se pudo insertar IAS:", e)
 
+    # ✅ Inserta radar IAS
+    try:
+        pdf.image('ias_radar.png', w=180)
+        pdf.ln(5)
+    except Exception as e:
+        print("No se pudo insertar radar IAS:", e)
+
+    
     # -------------------------------
     # Análisis interpretativo IAS
     # -------------------------------
