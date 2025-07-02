@@ -446,7 +446,6 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
 
 # 🚦 Genera PDF con análisis interpretativo incluido
 pdf_file = generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, edulcorantes_analisis)
-#pdf_file = generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, edulcorantes_analisis)
 
 st.download_button(
     label="📄 Descargar ficha PDF con análisis",
