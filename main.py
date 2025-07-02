@@ -3,10 +3,26 @@ import streamlit as st
 st.title("Cuestionario: Asociación del consumo de edulcorantes no calóricos")
 
 st.header("1️⃣ Datos sociodemográficos y clínicos")
+# Valor por defecto: hoy menos 30 años (opcional)
+default_date = datetime.date.today() - datetime.timedelta(days=30*365)
+
+# Fecha mínima: hace 120 años
+min_date = datetime.date.today() - datetime.timedelta(days=120*365)
+
+# Fecha máxima: hoy
+max_date = datetime.date.today()
+
 
 # Datos personales
 nombre = st.text_input("Nombre del paciente")
-fecha_nacimiento = st.date_input("Fecha de nacimiento")
+#fecha_nacimiento = st.date_input("Fecha de nacimiento")
+# Campo Streamlit
+fecha_nacimiento = st.date_input(
+    "Fecha de nacimiento",
+    value=default_date,
+    min_value=min_date,
+    max_value=max_date
+)
 numero_contacto = st.text_input("Número de contacto")
 municipio = st.text_input("Municipio")
 ocupacion = st.text_input("Ocupación")
