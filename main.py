@@ -434,12 +434,12 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
 # ------------------------------------
 #pdf_file = generar_pdf(datos, ias_respuestas, edulcorantes_respuestas)
 
-st.download_button(
-    label="📄 Descargar ficha PDF de respuestas",
-    data=pdf_file,
-    file_name="respuestas_cuestionario.pdf",
-    mime="application/pdf"
-)
+#st.download_button(
+#    label="📄 Descargar ficha PDF de respuestas",
+#    data=pdf_file,
+#    file_name="respuestas_cuestionario.pdf",
+#    mime="application/pdf"
+#)
 
 
 
