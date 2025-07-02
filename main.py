@@ -132,48 +132,49 @@ st.write(f"Puntuación total edulcorantes: {puntuacion_edulcorantes} de 24")
 
 import pandas as pd
 
-if st.button("Guardar respuestas"):
-    datos = {
-        "Nombre": nombre,
-        "Fecha nacimiento": fecha_nacimiento,
-        "Contacto": numero_contacto,
-        "Municipio": municipio,
-        "Ocupación": ocupacion,
-        "Estado civil": estado_civil,
-        "Educación": nivel_educacion,
-        "Sexo": sexo,
-        "Edad": edad,
-        "PAS": pas,
-        "Tabaquismo": tabaquismo,
-        "Diabetes": diabetes,
-        "Peso": peso,
-        "Talla": talla,
-        "IMC": imc,
-        "ICC": icc,
-        "Colesterol total": col_total,
-        "HDL": col_hdl,
-        "HbA1c": hba1c,
-        "Glucosa": glucosa,
-        "DAS28": das28,
-        "PCR": pcr,
-        "Factor reumatoide": factor_reumatoide,
-        "VSG": vsg,
-        "Leucocitos": leucocitos,
-        "Tiempo enfermedad": tiempo_enfermedad,
-        "Comorbilidades": comorbilidades,
-        "Comorbilidades CV": comorbilidades_cv,
-        "Tratamiento": tratamiento,
-        "Puntuación IAS": ias_total,
-        "Puntuación Edulcorantes": puntuacion_edulcorantes
-    }
-    df = pd.DataFrame([datos])
-    df.to_csv("respuestas_cuestionario.csv", mode='a', header=False, index=False)
-    st.success("Respuestas guardadas en 'respuestas_cuestionario.csv'")
+# Estructura tus datos en un diccionario
+datos = {
+    "Nombre": nombre,
+    "Fecha nacimiento": fecha_nacimiento,
+    "Contacto": numero_contacto,
+    "Municipio": municipio,
+    "Ocupación": ocupacion,
+    "Estado civil": estado_civil,
+    "Educación": nivel_educacion,
+    "Sexo": sexo,
+    "Edad": edad,
+    "PAS": pas,
+    "Tabaquismo": tabaquismo,
+    "Diabetes": diabetes,
+    "Peso": peso,
+    "Talla": talla,
+    "IMC": imc,
+    "ICC": icc,
+    "Colesterol total": col_total,
+    "HDL": col_hdl,
+    "HbA1c": hba1c,
+    "Glucosa": glucosa,
+    "DAS28": das28,
+    "PCR": pcr,
+    "Factor reumatoide": factor_reumatoide,
+    "VSG": vsg,
+    "Leucocitos": leucocitos,
+    "Tiempo enfermedad": tiempo_enfermedad,
+    "Comorbilidades": comorbilidades,
+    "Comorbilidades CV": comorbilidades_cv,
+    "Tratamiento": tratamiento,
+    "Puntuación IAS": ias_total,
+    "Puntuación Edulcorantes": puntuacion_edulcorantes
+}
 
-    # Botón de descarga
-    st.download_button(
-        label="📥 Descargar respuestas como CSV",
-        data=csv,
-        file_name='respuestas_cuestionario.csv',
-        mime='text/csv'
-    )
+# Convertir a DataFrame y luego a CSV en memoria
+df = pd.DataFrame([datos])
+csv = df.to_csv(index=False).encode('utf-8')
+
+# Botón de descarga
+st.download_button(
+    label="📥 Descargar respuestas como CSV",
+    data=csv,
+    file_name='respuestas_cuestionario.csv',
+    mime='text/csv'
+)
