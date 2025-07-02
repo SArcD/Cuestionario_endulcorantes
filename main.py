@@ -231,95 +231,6 @@ st.download_button(
     mime="text/csv"
 )
 
-from fpdf import FPDF
-from io import BytesIO
-import datetime
-
-
-def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, edulcorantes_analisis):
-    pdf = FPDF()
-    pdf.add_page()
-
-    # Título y fecha
-    pdf.set_font("Helvetica", 'B', 16)
-    pdf.cell(0, 10, "PROYECTO: Asociación del consumo de edulcorantes no calóricos", ln=True, align="C")
-    pdf.ln(5)
-    pdf.set_font("Helvetica", '', 12)
-    pdf.cell(0, 10, f"Fecha de llenado: {datetime.date.today().strftime('%d/%m/%Y')}", ln=True, align="C")
-    pdf.ln(10)
-
-    # Datos generales
-    pdf.set_font("Helvetica", 'B', 14)
-    pdf.cell(0, 10, "Datos sociodemográficos y clínicos", ln=True)
-    pdf.set_font("Helvetica", '', 11)
-    for key, value in datos.items():
-        if not key.startswith("IAS_") and not key.startswith("EDULCORANTES_") and not key.startswith("Puntuación"):
-            pdf.multi_cell(0, 8, f"{key}: {value}")
-
-    pdf.ln(5)
-
-    # Respuestas IAS
-    pdf.set_font("Helvetica", 'B', 14)
-    pdf.cell(0, 10, "Cuestionario: Índice de Alimentación Saludable (IAS)", ln=True)
-    pdf.set_font("Helvetica", '', 11)
-    for pregunta, respuesta in ias_respuestas.items():
-        pdf.multi_cell(0, 8, f"{pregunta}: {respuesta}")
-    pdf.cell(0, 10, f"Puntuación total IAS: {datos['Puntuación IAS']}", ln=True)
-
-    pdf.ln(5)
-
-    # Análisis IAS
-    pdf.set_font("Helvetica", 'B', 13)
-    pdf.cell(0, 10, "Análisis interpretativo IAS", ln=True)
-    pdf.set_font("Helvetica", '', 10)
-    for item in ias_analisis:
-        pdf.multi_cell(0, 6, f"- {item['Pregunta']}: {item['Análisis']} Recomendación: {item['Recomendación']}")
-
-    pdf.ln(5)
-
-    # Respuestas Edulcorantes
-    pdf.set_font("Helvetica", 'B', 14)
-    pdf.cell(0, 10, "Cuestionario: Frecuencia de Edulcorantes No Calóricos", ln=True)
-    pdf.set_font("Helvetica", '', 11)
-    for pregunta, respuesta in edulcorantes_respuestas.items():
-        pdf.multi_cell(0, 8, f"{pregunta}: {respuesta}")
-    pdf.cell(0, 10, f"Puntuación total Edulcorantes: {datos['Puntuación Edulcorantes']} de 24", ln=True)
-
-    pdf.ln(5)
-
-    # Análisis Edulcorantes
-    pdf.set_font("Helvetica", 'B', 13)
-    pdf.cell(0, 10, "Análisis interpretativo Edulcorantes", ln=True)
-    pdf.set_font("Helvetica", '', 10)
-    for item in edulcorantes_analisis:
-        pdf.multi_cell(0, 6, f"- {item['Pregunta']}: {item['Análisis']} Recomendación: {item['Recomendación']}")
-
-    pdf.ln(10)
-
-    # Pie de página
-    pdf.set_font("Helvetica", 'I', 9)
-    pdf.multi_cell(0, 6, "Este documento forma parte del proyecto de investigación.\n"
-                         "Firma del responsable: ____________________________")
-
-    # Salida PDF en memoria
-    pdf_bytes = pdf.output(dest='S').encode('latin-1')
-    buffer = BytesIO(pdf_bytes)
-    return buffer
-
-
-
-# ------------------------------------
-# Llamada para generar y descargar PDF
-# ------------------------------------
-#pdf_file = generar_pdf(datos, ias_respuestas, edulcorantes_respuestas)
-
-st.download_button(
-    label="📄 Descargar ficha PDF de respuestas",
-    data=pdf_file,
-    file_name="respuestas_cuestionario.pdf",
-    mime="application/pdf"
-)
-
 
 
 import pandas as pd
@@ -439,6 +350,98 @@ st.download_button(
     file_name="analisis_respuestas_individual.csv",
     mime="text/csv"
 )
+
+
+from fpdf import FPDF
+from io import BytesIO
+import datetime
+
+
+def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, edulcorantes_analisis):
+    pdf = FPDF()
+    pdf.add_page()
+
+    # Título y fecha
+    pdf.set_font("Helvetica", 'B', 16)
+    pdf.cell(0, 10, "PROYECTO: Asociación del consumo de edulcorantes no calóricos", ln=True, align="C")
+    pdf.ln(5)
+    pdf.set_font("Helvetica", '', 12)
+    pdf.cell(0, 10, f"Fecha de llenado: {datetime.date.today().strftime('%d/%m/%Y')}", ln=True, align="C")
+    pdf.ln(10)
+
+    # Datos generales
+    pdf.set_font("Helvetica", 'B', 14)
+    pdf.cell(0, 10, "Datos sociodemográficos y clínicos", ln=True)
+    pdf.set_font("Helvetica", '', 11)
+    for key, value in datos.items():
+        if not key.startswith("IAS_") and not key.startswith("EDULCORANTES_") and not key.startswith("Puntuación"):
+            pdf.multi_cell(0, 8, f"{key}: {value}")
+
+    pdf.ln(5)
+
+    # Respuestas IAS
+    pdf.set_font("Helvetica", 'B', 14)
+    pdf.cell(0, 10, "Cuestionario: Índice de Alimentación Saludable (IAS)", ln=True)
+    pdf.set_font("Helvetica", '', 11)
+    for pregunta, respuesta in ias_respuestas.items():
+        pdf.multi_cell(0, 8, f"{pregunta}: {respuesta}")
+    pdf.cell(0, 10, f"Puntuación total IAS: {datos['Puntuación IAS']}", ln=True)
+
+    pdf.ln(5)
+
+    # Análisis IAS
+    pdf.set_font("Helvetica", 'B', 13)
+    pdf.cell(0, 10, "Análisis interpretativo IAS", ln=True)
+    pdf.set_font("Helvetica", '', 10)
+    for item in ias_analisis:
+        pdf.multi_cell(0, 6, f"- {item['Pregunta']}: {item['Análisis']} Recomendación: {item['Recomendación']}")
+
+    pdf.ln(5)
+
+    # Respuestas Edulcorantes
+    pdf.set_font("Helvetica", 'B', 14)
+    pdf.cell(0, 10, "Cuestionario: Frecuencia de Edulcorantes No Calóricos", ln=True)
+    pdf.set_font("Helvetica", '', 11)
+    for pregunta, respuesta in edulcorantes_respuestas.items():
+        pdf.multi_cell(0, 8, f"{pregunta}: {respuesta}")
+    pdf.cell(0, 10, f"Puntuación total Edulcorantes: {datos['Puntuación Edulcorantes']} de 24", ln=True)
+
+    pdf.ln(5)
+
+    # Análisis Edulcorantes
+    pdf.set_font("Helvetica", 'B', 13)
+    pdf.cell(0, 10, "Análisis interpretativo Edulcorantes", ln=True)
+    pdf.set_font("Helvetica", '', 10)
+    for item in edulcorantes_analisis:
+        pdf.multi_cell(0, 6, f"- {item['Pregunta']}: {item['Análisis']} Recomendación: {item['Recomendación']}")
+
+    pdf.ln(10)
+
+    # Pie de página
+    pdf.set_font("Helvetica", 'I', 9)
+    pdf.multi_cell(0, 6, "Este documento forma parte del proyecto de investigación.\n"
+                         "Firma del responsable: ____________________________")
+
+    # Salida PDF en memoria
+    pdf_bytes = pdf.output(dest='S').encode('latin-1')
+    buffer = BytesIO(pdf_bytes)
+    return buffer
+
+
+
+# ------------------------------------
+# Llamada para generar y descargar PDF
+# ------------------------------------
+#pdf_file = generar_pdf(datos, ias_respuestas, edulcorantes_respuestas)
+
+st.download_button(
+    label="📄 Descargar ficha PDF de respuestas",
+    data=pdf_file,
+    file_name="respuestas_cuestionario.pdf",
+    mime="application/pdf"
+)
+
+
 
 
 # 🚦 Genera PDF con análisis interpretativo incluido
