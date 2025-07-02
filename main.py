@@ -440,7 +440,10 @@ st.pyplot(fig)
 # ------------------------------------
 # Guardar imagen para PDF (opcional)
 # ------------------------------------
-fig.savefig('ias_barras.png', bbox_inches='tight')
+#fig.savefig('ias_barras.png', bbox_inches='tight')
+# Gráfica IAS Barras
+fig.savefig('ias_barras.png', bbox_inches='tight', pad_inches=0, dpi=300)
+
 
 
 # ------------------------------------
@@ -609,7 +612,7 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
     #    print("No se pudo insertar IAS:", e)
 
     try:
-        barras_w = 100  # ancho de la imagen en mm
+        barras_w = 120  # ancho de la imagen en mm
         page_width = pdf.w - 2 * pdf.l_margin  # ancho útil de página
         x_center_barras = (page_width - barras_w) / 2 + pdf.l_margin  # X centrada
 
