@@ -601,12 +601,26 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
     pdf.cell(0, 10, f"Puntuación total IAS: {datos['Puntuación IAS']}", ln=True)
     pdf.ln(5)
 
-    # ✅ Inserta gráfica IAS guardada
+    ## ✅ Inserta gráfica IAS guardada
+    #try:
+    #    pdf.image('ias_barras.png', w=120)
+    #    pdf.ln(5)
+    #except Exception as e:
+    #    print("No se pudo insertar IAS:", e)
+
+    # ✅ Inserta gráfica IAS guardada centrada
     try:
-        pdf.image('ias_barras.png', w=120)
+        barras_w = 120  # ancho de la imagen en mm (ajusta si quieres)
+        page_width = pdf.w - 2 * pdf.l_margin  # ancho de la página menos márgenes
+
+        # Calcular posición X centrada
+        x_center = (page_width - barras_w) / 2 + pdf.l_margin
+
+        pdf.image('ias_barras.png', x=x_center, w=barras_w)
         pdf.ln(5)
     except Exception as e:
         print("No se pudo insertar IAS:", e)
+
 
     # ✅ Inserta radar IAS
     #try:
@@ -681,12 +695,24 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
     pdf.cell(0, 10, f"Puntuación total Edulcorantes: {datos['Puntuación Edulcorantes']} de 24", ln=True)
     pdf.ln(5)
 
-    # ✅ Inserta gráfica Edulcorantes guardada
+    ## ✅ Inserta gráfica Edulcorantes guardada
+    #try:
+    #    pdf.image('edulcorantes_barras.png', w=120)
+    #    pdf.ln(5)
+    #except Exception as e:
+    #    print("No se pudo insertar Edulcorantes:", e)
+
+    # ✅ Inserta gráfica Edulcorantes guardada centrada
     try:
-        pdf.image('edulcorantes_barras.png', w=120)
+        edulcorantes_w = 120  # ancho de la imagen en mm (ajústalo si quieres)
+        page_width = pdf.w - 2 * pdf.l_margin  # ancho útil de la página
+        x_center = (page_width - edulcorantes_w) / 2 + pdf.l_margin  # coordenada X centrada
+
+        pdf.image('edulcorantes_barras.png', x=x_center, w=edulcorantes_w)
         pdf.ln(5)
     except Exception as e:
         print("No se pudo insertar Edulcorantes:", e)
+
 
     # -------------------------------
     # Análisis interpretativo Edulcorantes
