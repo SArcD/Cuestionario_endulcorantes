@@ -406,6 +406,49 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
     pdf.cell(0, 10, f"Puntuación total IAS: {datos['Puntuación IAS']}", ln=True)
     pdf.ln(5)
 
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import streamlit as st
+
+    # ------------------------------------
+    # Ejemplo: datos por grupo
+    # ------------------------------------
+    # Extrae puntos asignados por cada grupo
+    ias_puntos_por_pregunta = []
+
+    for pregunta, puntos in ias_preguntas.items():
+        respuesta = ias_respuestas[pregunta]
+        idx = opciones.index(respuesta)
+        ias_puntos_por_pregunta.append(puntos[idx])
+
+    # Etiquetas resumidas
+    ias_labels = [
+        "Cereales", "Verduras", "Frutas",
+        "Lácteos", "Carnes", "Leguminosas",
+        "Embutidos", "Postres", "Refrescos"
+    ]
+
+    # ------------------------------------
+    # Crear gráfica de barras
+    # ------------------------------------
+    fig, ax = plt.subplots(figsize=(8, 5))
+    y_pos = np.arange(len(ias_labels))
+    ax.barh(y_pos, ias_puntos_por_pregunta, color='skyblue')
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(ias_labels)
+    ax.set_xlabel('Puntos asignados')
+    ax.set_title('Distribución de puntuación IAS por grupo')
+
+    st.pyplot(fig)
+
+    # ------------------------------------
+    # Guardar imagen para PDF (opcional)
+    # ------------------------------------
+    fig.savefig('ias_barras.png', bbox_inches='tight')
+
+
+    
     # -------------------------------
     # Análisis interpretativo IAS
     # -------------------------------
