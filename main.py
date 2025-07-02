@@ -498,21 +498,21 @@ st.pyplot(fig_radar)
 fig_radar.savefig('ias_radar.png', bbox_inches='tight')
 
 
-# Plot
-fig_radar, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
-ax.fill(angles, values, color='skyblue', alpha=0.4)
-ax.plot(angles, values, color='blue', linewidth=2)
+## Plot
+#fig_radar, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
+#ax.fill(angles, values, color='skyblue', alpha=0.4)
+#ax.plot(angles, values, color='blue', linewidth=2)
 
-ax.set_yticks([2, 4, 6, 8, 10])
-ax.set_yticklabels(['2', '4', '6', '8', '10'])
-ax.set_xticks(angles[:-1])
-ax.set_xticklabels(ias_labels)
-ax.set_title('Perfil de consumo IAS (Radar)', size=14)
+#ax.set_yticks([2, 4, 6, 8, 10])
+#ax.set_yticklabels(['2', '4', '6', '8', '10'])
+#ax.set_xticks(angles[:-1])
+#ax.set_xticklabels(ias_labels)
+#ax.set_title('Perfil de consumo IAS (Radar)', size=14)
 
-st.pyplot(fig_radar)
+#st.pyplot(fig_radar)
 
-# Guarda para PDF
-fig_radar.savefig('ias_radar.png', bbox_inches='tight')
+## Guarda para PDF
+#fig_radar.savefig('ias_radar.png', bbox_inches='tight')
 
 
 
