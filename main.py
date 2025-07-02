@@ -352,9 +352,94 @@ st.download_button(
 )
 
 
-from fpdf import FPDF
-from io import BytesIO
-import datetime
+
+import matplotlib.pyplot as plt
+import numpy as np
+import streamlit as st
+
+# ------------------------------------
+# Ejemplo: datos por grupo
+# ------------------------------------
+# Extrae puntos asignados por cada grupo
+ias_puntos_por_pregunta = []
+
+for pregunta, puntos in ias_preguntas.items():
+    respuesta = ias_respuestas[pregunta]
+    idx = opciones.index(respuesta)
+    ias_puntos_por_pregunta.append(puntos[idx])
+
+# Etiquetas resumidas
+ias_labels = [
+    "Cereales", "Verduras", "Frutas",
+    "Lácteos", "Carnes", "Leguminosas",
+    "Embutidos", "Postres", "Refrescos"
+]
+
+# ------------------------------------
+# Crear gráfica de barras
+# ------------------------------------
+fig, ax = plt.subplots(figsize=(8, 5))
+y_pos = np.arange(len(ias_labels))
+ax.barh(y_pos, ias_puntos_por_pregunta, color='skyblue')
+ax.set_yticks(y_pos)
+ax.set_yticklabels(ias_labels)
+ax.set_xlabel('Puntos asignados')
+ax.set_title('Distribución de puntuación IAS por grupo')
+
+st.pyplot(fig)
+
+# ------------------------------------
+# Guardar imagen para PDF (opcional)
+# ------------------------------------
+fig.savefig('ias_barras.png', bbox_inches='tight')
+
+
+# ------------------------------------
+# Datos por producto con edulcorante
+# ------------------------------------
+edulcorantes_puntos = []
+
+for pregunta in edulcorantes_preguntas:
+    respuesta = edulcorantes_respuestas[pregunta]
+    idx = opciones_edulcorantes.index(respuesta)
+    edulcorantes_puntos.append(puntos_edulcorantes[idx])
+
+edulcorantes_labels = [
+    "Sobres", "Bebidas light", "Yogurt light",
+    "Gelatinas light", "Chicles sin azúcar",
+    "Saborizantes", "Postres sin azúcar", "Cereales light"
+]
+
+# ------------------------------------
+# Gráfica de barras
+# ------------------------------------
+fig2, ax2 = plt.subplots(figsize=(8, 5))
+y_pos = np.arange(len(edulcorantes_labels))
+ax2.barh(y_pos, edulcorantes_puntos, color='lightgreen')
+ax2.set_yticks(y_pos)
+ax2.set_yticklabels(edulcorantes_labels)
+ax2.set_xlabel('Frecuencia (puntos)')
+ax2.set_title('Frecuencia de consumo de edulcorantes')
+
+st.pyplot(fig2)
+
+# Guardar imagen para PDF (opcional)
+fig2.savefig('edulcorantes_barras.png', bbox_inches='tight')
+
+
+# Inserta gráfica IAS
+try:
+    pdf.image('ias_barras.png', w=180)  # Ajusta ancho a tu hoja A4
+    pdf.ln(5)
+except:
+    pass  # Si no existe, no pasa nada
+
+# Inserta gráfica Edulcorantes
+try:
+    pdf.image('edulcorantes_barras.png', w=180)
+    pdf.ln(5)
+except:
+    pass
 
 
 from fpdf import FPDF
@@ -407,47 +492,7 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
     pdf.ln(5)
 
 
-    import matplotlib.pyplot as plt
-    import numpy as np
-    import streamlit as st
-
-    # ------------------------------------
-    # Ejemplo: datos por grupo
-    # ------------------------------------
-    # Extrae puntos asignados por cada grupo
-    ias_puntos_por_pregunta = []
-
-    for pregunta, puntos in ias_preguntas.items():
-        respuesta = ias_respuestas[pregunta]
-        idx = opciones.index(respuesta)
-        ias_puntos_por_pregunta.append(puntos[idx])
-
-    # Etiquetas resumidas
-    ias_labels = [
-        "Cereales", "Verduras", "Frutas",
-        "Lácteos", "Carnes", "Leguminosas",
-        "Embutidos", "Postres", "Refrescos"
-    ]
-
-    # ------------------------------------
-    # Crear gráfica de barras
-    # ------------------------------------
-    fig, ax = plt.subplots(figsize=(8, 5))
-    y_pos = np.arange(len(ias_labels))
-    ax.barh(y_pos, ias_puntos_por_pregunta, color='skyblue')
-    ax.set_yticks(y_pos)
-    ax.set_yticklabels(ias_labels)
-    ax.set_xlabel('Puntos asignados')
-    ax.set_title('Distribución de puntuación IAS por grupo')
-
-    st.pyplot(fig)
-
-    # ------------------------------------
-    # Guardar imagen para PDF (opcional)
-    # ------------------------------------
-    fig.savefig('ias_barras.png', bbox_inches='tight')
-
-
+    
     
     # -------------------------------
     # Análisis interpretativo IAS
