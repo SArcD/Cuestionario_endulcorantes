@@ -287,10 +287,19 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas):
                          "Firma del responsable: ____________________________")
 
     # Guardar PDF en memoria
-    buffer = BytesIO()
-    pdf.output(buffer)
-    buffer.seek(0)
+    #buffer = BytesIO()
+    #pdf.output(buffer)
+    #buffer.seek(0)
+    #return buffer
+
+    from io import BytesIO
+
+    # Guardar PDF como bytes
+    pdf_bytes = pdf.output(dest='S').encode('latin-1')
+    buffer = BytesIO(pdf_bytes)
     return buffer
+
+
 
 # ------------------------------------
 # Llamada para generar y descargar PDF
