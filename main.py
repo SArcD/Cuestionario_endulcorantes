@@ -547,29 +547,15 @@ st.pyplot(fig_radar)
 fig_radar.savefig('ias_radar.png', bbox_inches='tight')
 
 
-## Plot
-#fig_radar, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
-#ax.fill(angles, values, color='skyblue', alpha=0.4)
-#ax.plot(angles, values, color='blue', linewidth=2)
-
-#ax.set_yticks([2, 4, 6, 8, 10])
-#ax.set_yticklabels(['2', '4', '6', '8', '10'])
-#ax.set_xticks(angles[:-1])
-#ax.set_xticklabels(ias_labels)
-#ax.set_title('Perfil de consumo IAS (Radar)', size=14)
-
-#st.pyplot(fig_radar)
-
-## Guarda para PDF
-#fig_radar.savefig('ias_radar.png', bbox_inches='tight')
-
 
 
 from fpdf import FPDF
 from io import BytesIO
 import datetime
 
-def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, edulcorantes_analisis):
+#def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, edulcorantes_analisis):
+def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, edulcorantes_analisis, df_semaforo):
+
     pdf = FPDF()
     pdf.add_page()
 
@@ -644,6 +630,21 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
     pdf.ln(5)
 
     # -------------------------------
+    # 🚦 Semáforo Nutricional IAS
+    # -------------------------------
+    pdf.set_font("Helvetica", 'B', 13)
+    pdf.cell(0, 10, "Semáforo Nutricional IAS", ln=True)
+    pdf.set_font("Helvetica", '', 11)
+
+    for index, row in df_semaforo.iterrows():
+        grupo = row["Grupo"]
+        puntos = row["Puntos"]
+        semaforo = row["Semáforo"]
+        pdf.write(5, f"{grupo}: {puntos} puntos | {semaforo}\n")
+
+
+    
+    # -------------------------------
     # Respuestas Edulcorantes
     # -------------------------------
     pdf.set_font("Helvetica", 'B', 14)
@@ -711,7 +712,17 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
 
 
 # 🚦 Genera PDF con análisis interpretativo incluido
-pdf_file = generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, edulcorantes_analisis)
+#pdf_file = generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, edulcorantes_analisis)
+pdf_file = generar_pdf(
+    datos,
+    ias_respuestas,
+    edulcorantes_respuestas,
+    ias_analisis,
+    edulcorantes_analisis,
+    df_semaforo  # 👈 Nuevo argumento
+)
+
+
 
 st.download_button(
     label="📄 Descargar ficha PDF con análisis",
