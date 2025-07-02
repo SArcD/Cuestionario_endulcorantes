@@ -486,14 +486,19 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
         pdf.write(5, f"{pregunta}: ")
         pdf.set_font("Helvetica", '', 11)
         pdf.write(5, f"{respuesta}\n")
+
     pdf.ln(2)
     pdf.set_font("Helvetica", '', 11)
     pdf.cell(0, 10, f"Puntuación total IAS: {datos['Puntuación IAS']}", ln=True)
     pdf.ln(5)
 
+    # ✅ Inserta gráfica IAS guardada
+    try:
+        pdf.image('ias_barras.png', w=180)
+        pdf.ln(5)
+    except Exception as e:
+        print("No se pudo insertar IAS:", e)
 
-    
-    
     # -------------------------------
     # Análisis interpretativo IAS
     # -------------------------------
@@ -518,10 +523,18 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
         pdf.write(5, f"{pregunta}: ")
         pdf.set_font("Helvetica", '', 11)
         pdf.write(5, f"{respuesta}\n")
+
     pdf.ln(2)
     pdf.set_font("Helvetica", '', 11)
     pdf.cell(0, 10, f"Puntuación total Edulcorantes: {datos['Puntuación Edulcorantes']} de 24", ln=True)
     pdf.ln(5)
+
+    # ✅ Inserta gráfica Edulcorantes guardada
+    try:
+        pdf.image('edulcorantes_barras.png', w=180)
+        pdf.ln(5)
+    except Exception as e:
+        print("No se pudo insertar Edulcorantes:", e)
 
     # -------------------------------
     # Análisis interpretativo Edulcorantes
@@ -549,7 +562,6 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
     pdf_bytes = pdf.output(dest='S').encode('latin-1')
     buffer = BytesIO(pdf_bytes)
     return buffer
-
 
 
 # ------------------------------------
