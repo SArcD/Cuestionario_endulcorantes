@@ -636,24 +636,17 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
     pdf.cell(0, 10, "Semáforo Nutricional IAS", ln=True)
     pdf.set_font("Helvetica", '', 11)
 
-    #for index, row in df_semaforo.iterrows():
-    #    grupo = row["Grupo"]
-    #    puntos = row["Puntos"]
-    #    semaforo = row["Semáforo"]
-    #    pdf.write(5, f"{grupo}: {puntos} puntos | {semaforo}\n")
-    #    # Reemplaza emojis por texto
-    #    semaforo_clean = semaforo.replace("🟢", "Verde").replace("🟡", "Amarillo").replace("🔴", "Rojo")
 
     for index, row in df_semaforo.iterrows():
         grupo = row["Grupo"]
         puntos = row["Puntos"]
-        semaforo = row["Semáforo"]
 
-        # Reemplaza emojis por texto
-        semaforo_clean = semaforo.replace("🟢", "Verde").replace("🟡", "Amarillo").replace("🔴", "Rojo")
+        # Desglosa color y nivel
+        semaforo_parts = row["Semáforo"].split(" ")
+        color = semaforo_parts[0].replace("🟢", "Verde").replace("🟡", "Amarillo").replace("🔴", "Rojo")
+        nivel = semaforo_parts[1] if len(semaforo_parts) > 1 else ""
 
-        pdf.write(5, f"{grupo}: {puntos} puntos | {semaforo_clean}\n")
-
+        pdf.write(5, f"{grupo}: {puntos} puntos | Color: {color} | Nivel: {nivel}\n")
 
     
     
