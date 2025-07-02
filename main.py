@@ -620,7 +620,7 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
         pdf.ln(5)
     except Exception as e:
         print("No se pudo insertar IAS:", e)
-
+    st.markdown("dd")
 
     try:
         radar_w = 120  # ancho de la imagen en mm
