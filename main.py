@@ -603,14 +603,14 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
 
     # ✅ Inserta gráfica IAS guardada
     try:
-        pdf.image('ias_barras.png', w=150)
+        pdf.image('ias_barras.png', w=120)
         pdf.ln(5)
     except Exception as e:
         print("No se pudo insertar IAS:", e)
 
     # ✅ Inserta radar IAS
     try:
-        pdf.image('ias_radar.png', w=150)
+        pdf.image('ias_radar.png', w=120)
         pdf.ln(5)
     except Exception as e:
         print("No se pudo insertar radar IAS:", e)
@@ -669,7 +669,7 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
 
     # ✅ Inserta gráfica Edulcorantes guardada
     try:
-        pdf.image('edulcorantes_barras.png', w=150)
+        pdf.image('edulcorantes_barras.png', w=120)
         pdf.ln(5)
     except Exception as e:
         print("No se pudo insertar Edulcorantes:", e)
