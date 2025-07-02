@@ -609,11 +609,25 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, ed
         print("No se pudo insertar IAS:", e)
 
     # ✅ Inserta radar IAS
+    #try:
+    #    pdf.image('ias_radar.png', w=120)
+    #    pdf.ln(5)
+    #except Exception as e:
+    #    print("No se pudo insertar radar IAS:", e)
+
+    # ✅ Inserta radar IAS centrado
     try:
-        pdf.image('ias_radar.png', w=120)
+        radar_w = 120  # ancho de la imagen en mm (ajusta según tu gráfica)
+        page_width = pdf.w - 2 * pdf.l_margin  # ancho disponible menos márgenes
+
+        #   Calcular posición X para centrar
+        x_center = (page_width - radar_w) / 2 + pdf.l_margin
+
+        pdf.image('ias_radar.png', x=x_center, w=radar_w)
         pdf.ln(5)
     except Exception as e:
         print("No se pudo insertar radar IAS:", e)
+
 
     
     # -------------------------------
