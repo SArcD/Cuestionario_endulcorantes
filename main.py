@@ -334,6 +334,47 @@ df_edulcorantes = pd.DataFrame(edulcorantes_analisis)
 
 st.subheader("🔍 Análisis de respuestas IAS")
 st.dataframe(df_ias)
+# ---------------------------------------
+# 🟢 Semáforo nutricional IAS por grupo
+# ---------------------------------------
+
+ias_semaforo = []
+
+for i, pregunta in enumerate(ias_preguntas.keys()):
+    respuesta = ias_respuestas[pregunta]
+    puntos = ias_preguntas[pregunta][opciones.index(respuesta)]
+    
+    if puntos >= 8:
+        color = "🟢 Óptimo"
+    elif 5 <= puntos < 8:
+        color = "🟡 Moderado"
+    else:
+        color = "🔴 Bajo"
+
+    ias_semaforo.append({
+        "Grupo": list(ias_labels)[i],
+        "Puntos": puntos,
+        "Semáforo": color
+    })
+
+# DataFrame semáforo
+df_semaforo = pd.DataFrame(ias_semaforo)
+
+st.subheader("🚦 Semáforo Nutricional IAS")
+st.dataframe(df_semaforo)
+
+# Permitir descarga del semáforo
+csv_semaforo = df_semaforo.to_csv(index=False).encode('utf-8')
+
+st.download_button(
+    label="📥 Descargar semáforo IAS (CSV)",
+    data=csv_semaforo,
+    file_name="ias_semaforo.csv",
+    mime="text/csv"
+)
+
+
+
 
 st.subheader("🔍 Análisis de respuestas Edulcorantes")
 st.dataframe(df_edulcorantes)
