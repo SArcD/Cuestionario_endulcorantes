@@ -464,15 +464,39 @@ ias_labels = [
     "Embutidos", "Postres", "Refrescos"
 ]
 
-# Cierra el círculo
-values = ias_puntos_por_pregunta + [ias_puntos_por_pregunta[0]]
-labels = ias_labels + [ias_labels[0]]
-num_vars = len(labels)
+# Puntos por grupo
+ias_puntos_por_pregunta = []
+for pregunta, puntos in ias_preguntas.items():
+    respuesta = ias_respuestas[pregunta]
+    idx = opciones.index(respuesta)
+    ias_puntos_por_pregunta.append(puntos[idx])
 
-# Ángulos
-angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
-values += values[:1]
-angles += angles[:1]
+# Etiquetas resumidas
+ias_labels = [
+    "Cereales", "Verduras", "Frutas",
+    "Lácteos", "Carnes", "Leguminosas",
+    "Embutidos", "Postres", "Refrescos"
+]
+
+# Radar: cerrar el círculo solo UNA VEZ
+values = ias_puntos_por_pregunta + [ias_puntos_por_pregunta[0]]
+num_vars = len(values)
+angles = np.linspace(0, 2 * np.pi, num_vars)
+
+# Plot
+fig_radar, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
+ax.fill(angles, values, color='skyblue', alpha=0.4)
+ax.plot(angles, values, color='blue', linewidth=2)
+
+ax.set_yticks([2, 4, 6, 8, 10])
+ax.set_yticklabels(['2', '4', '6', '8', '10'])
+ax.set_xticks(angles[:-1])
+ax.set_xticklabels(ias_labels)
+ax.set_title('Perfil de consumo IAS (Radar)', size=14)
+
+st.pyplot(fig_radar)
+fig_radar.savefig('ias_radar.png', bbox_inches='tight')
+
 
 # Plot
 fig_radar, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
