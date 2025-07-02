@@ -51,3 +51,51 @@ tiempo_enfermedad = st.text_input("Tiempo de evolución de la enfermedad")
 comorbilidades = st.text_area("Comorbilidades")
 comorbilidades_cv = st.text_area("Comorbilidades cardiovasculares")
 tratamiento = st.text_area("Tratamiento")
+
+
+
+st.header("2️⃣ Cuestionario Índice de Alimentación Saludable")
+
+# Define preguntas, opciones y puntuación
+ias_preguntas = {
+    "¿Con qué frecuencia consume cereales y sus derivados?": [10, 7.5, 5, 2.5, 0],
+    "¿Con qué frecuencia consume verduras?": [10, 7.5, 5, 2.5, 0],
+    "¿Con qué frecuencia consume frutas frescas?": [10, 7.5, 5, 2.5, 0],
+    "¿Con qué frecuencia consume lácteos bajos en grasa?": [10, 7.5, 5, 2.5, 0],
+    "¿Con qué frecuencia consume carnes rojas no procesadas?": [2.5, 7.5, 10, 5, 0],
+    "¿Con qué frecuencia consume leguminosas cocidas?": [2.5, 7.5, 10, 5, 0],
+    "¿Con qué frecuencia consume embutidos y carnes procesadas?": [0, 2.5, 5, 7.5, 10],
+    "¿Con qué frecuencia consume postres y dulces?": [0, 2.5, 5, 7.5, 10],
+    "¿Con qué frecuencia consume refrescos o bebidas con azúcar añadida?": [0, 2.5, 5, 7.5, 10]
+}
+
+opciones = [
+    "Diario",
+    "3 o más veces a la semana pero no diario",
+    "1 o 2 veces a la semana",
+    "Menos de 1 vez a la semana",
+    "Nunca o casi nunca"
+]
+
+ias_puntuacion = 0
+
+for pregunta, puntos in ias_preguntas.items():
+    respuesta = st.radio(pregunta, opciones, key=pregunta)
+    ias_puntuacion += puntos[opciones.index(respuesta)]
+
+# Variedad de la dieta
+variedad_puntos = 0
+if st.checkbox("¿Respondió 'Diario' en preguntas 1 a 4?"):
+    variedad_puntos += 2 * 4  # ejemplo: suma fija si todas son 'Diario'
+
+ias_total = ias_puntuacion + variedad_puntos
+
+st.write(f"Puntuación total IAS: {ias_total}")
+
+if ias_total < 50:
+    st.warning("Clasificación: No saludable")
+elif 50 <= ias_total <= 80:
+    st.info("Clasificación: Necesita cambios")
+else:
+    st.success("Clasificación: Saludable")
+
