@@ -99,3 +99,74 @@ elif 50 <= ias_total <= 80:
 else:
     st.success("Clasificación: Saludable")
 
+st.header("3️⃣ Frecuencia de consumo de productos con edulcorantes no calóricos")
+
+edulcorantes_preguntas = [
+    "¿Con qué frecuencia consume sobres de sustituto de azúcar?",
+    "¿Con qué frecuencia consume bebidas light o sin azúcar?",
+    "¿Con qué frecuencia consume yogurt light sin azúcar?",
+    "¿Con qué frecuencia consume gelatinas de caja versión regular o light?",
+    "¿Con qué frecuencia consume chicles o pastillas sin azúcar?",
+    "¿Con qué frecuencia consume saborizantes de agua en polvo?",
+    "¿Con qué frecuencia consume postres y dulces sin azúcar?",
+    "¿Con qué frecuencia consume cereales light o sin azúcar?"
+]
+
+opciones_edulcorantes = [
+    "Diario",
+    "Al menos 1 vez a la semana pero no diario",
+    "Al menos 1 vez al mes pero no todas las semanas",
+    "Nunca o muy pocas veces al año"
+]
+
+puntos_edulcorantes = [3, 2, 1, 0]
+
+puntuacion_edulcorantes = 0
+
+for pregunta in edulcorantes_preguntas:
+    respuesta = st.radio(pregunta, opciones_edulcorantes, key=pregunta)
+    puntuacion_edulcorantes += puntos_edulcorantes[opciones_edulcorantes.index(respuesta)]
+
+st.write(f"Puntuación total edulcorantes: {puntuacion_edulcorantes} de 24")
+
+
+import pandas as pd
+
+if st.button("Guardar respuestas"):
+    datos = {
+        "Nombre": nombre,
+        "Fecha nacimiento": fecha_nacimiento,
+        "Contacto": numero_contacto,
+        "Municipio": municipio,
+        "Ocupación": ocupacion,
+        "Estado civil": estado_civil,
+        "Educación": nivel_educacion,
+        "Sexo": sexo,
+        "Edad": edad,
+        "PAS": pas,
+        "Tabaquismo": tabaquismo,
+        "Diabetes": diabetes,
+        "Peso": peso,
+        "Talla": talla,
+        "IMC": imc,
+        "ICC": icc,
+        "Colesterol total": col_total,
+        "HDL": col_hdl,
+        "HbA1c": hba1c,
+        "Glucosa": glucosa,
+        "DAS28": das28,
+        "PCR": pcr,
+        "Factor reumatoide": factor_reumatoide,
+        "VSG": vsg,
+        "Leucocitos": leucocitos,
+        "Tiempo enfermedad": tiempo_enfermedad,
+        "Comorbilidades": comorbilidades,
+        "Comorbilidades CV": comorbilidades_cv,
+        "Tratamiento": tratamiento,
+        "Puntuación IAS": ias_total,
+        "Puntuación Edulcorantes": puntuacion_edulcorantes
+    }
+    df = pd.DataFrame([datos])
+    df.to_csv("respuestas_cuestionario.csv", mode='a', header=False, index=False)
+    st.success("Respuestas guardadas en 'respuestas_cuestionario.csv'")
+
