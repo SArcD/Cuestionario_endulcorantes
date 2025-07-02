@@ -4,6 +4,14 @@ import datetime
 
 
 st.title("Cuestionario: Asociación del consumo de edulcorantes no calóricos")
+# Etiquetas resumidas IAS
+ias_labels = [
+    "Cereales", "Verduras", "Frutas",
+    "Lácteos", "Carnes", "Leguminosas",
+    "Embutidos", "Postres", "Refrescos"
+]
+
+
 
 st.header("1️⃣ Datos sociodemográficos y clínicos")
 # Valor por defecto: hoy menos 30 años (opcional)
