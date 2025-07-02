@@ -130,10 +130,31 @@ for pregunta in edulcorantes_preguntas:
 st.write(f"Puntuación total edulcorantes: {puntuacion_edulcorantes} de 24")
 
 
+import streamlit as st
 import pandas as pd
 
-# Estructura tus datos en un diccionario
+# ------------------------------------
+# 1. Captura de respuestas individuales
+# ------------------------------------
+
+# Índice de Alimentación Saludable
+ias_respuestas = {}
+for pregunta in ias_preguntas:
+    respuesta = st.session_state.get(pregunta, "Sin respuesta")
+    ias_respuestas[pregunta] = respuesta
+
+# Cuestionario Edulcorantes
+edulcorantes_respuestas = {}
+for pregunta in edulcorantes_preguntas:
+    respuesta = st.session_state.get(pregunta, "Sin respuesta")
+    edulcorantes_respuestas[pregunta] = respuesta
+
+# ------------------------------------
+# 2. Construir diccionario de datos completo
+# ------------------------------------
+
 datos = {
+    # Datos generales
     "Nombre": nombre,
     "Fecha nacimiento": fecha_nacimiento,
     "Contacto": numero_contacto,
@@ -163,18 +184,31 @@ datos = {
     "Comorbilidades": comorbilidades,
     "Comorbilidades CV": comorbilidades_cv,
     "Tratamiento": tratamiento,
+
+    # Totales
     "Puntuación IAS": ias_total,
     "Puntuación Edulcorantes": puntuacion_edulcorantes
 }
 
-# Convertir a DataFrame y luego a CSV en memoria
+# Agregar cada respuesta individual IAS
+for pregunta, respuesta in ias_respuestas.items():
+    datos[f"IAS_{pregunta}"] = respuesta
+
+# Agregar cada respuesta individual Edulcorantes
+for pregunta, respuesta in edulcorantes_respuestas.items():
+    datos[f"EDULCORANTES_{pregunta}"] = respuesta
+
+# ------------------------------------
+# 3. Convertir a DataFrame y permitir descarga
+# ------------------------------------
+
 df = pd.DataFrame([datos])
 csv = df.to_csv(index=False).encode('utf-8')
 
-# Botón de descarga
 st.download_button(
-    label="📥 Descargar respuestas como CSV",
+    label="📥 Descargar respuestas completas como CSV",
     data=csv,
-    file_name='respuestas_cuestionario.csv',
-    mime='text/csv'
+    file_name="respuestas_cuestionario_completo.csv",
+    mime="text/csv"
 )
+
