@@ -235,14 +235,12 @@ from fpdf import FPDF
 from io import BytesIO
 import datetime
 
-# ------------------------------------
-# Función para generar PDF
-# ------------------------------------
-def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas):
+
+def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, edulcorantes_analisis):
     pdf = FPDF()
     pdf.add_page()
 
-    # Portada
+    # Título y fecha
     pdf.set_font("Helvetica", 'B', 16)
     pdf.cell(0, 10, "PROYECTO: Asociación del consumo de edulcorantes no calóricos", ln=True, align="C")
     pdf.ln(5)
@@ -254,14 +252,13 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas):
     pdf.set_font("Helvetica", 'B', 14)
     pdf.cell(0, 10, "Datos sociodemográficos y clínicos", ln=True)
     pdf.set_font("Helvetica", '', 11)
-
     for key, value in datos.items():
-        if not key.startswith("IAS_") and not key.startswith("EDULCORANTES_"):
+        if not key.startswith("IAS_") and not key.startswith("EDULCORANTES_") and not key.startswith("Puntuación"):
             pdf.multi_cell(0, 8, f"{key}: {value}")
 
     pdf.ln(5)
 
-    # IAS
+    # Respuestas IAS
     pdf.set_font("Helvetica", 'B', 14)
     pdf.cell(0, 10, "Cuestionario: Índice de Alimentación Saludable (IAS)", ln=True)
     pdf.set_font("Helvetica", '', 11)
@@ -271,7 +268,16 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas):
 
     pdf.ln(5)
 
-    # Edulcorantes
+    # Análisis IAS
+    pdf.set_font("Helvetica", 'B', 13)
+    pdf.cell(0, 10, "Análisis interpretativo IAS", ln=True)
+    pdf.set_font("Helvetica", '', 10)
+    for item in ias_analisis:
+        pdf.multi_cell(0, 6, f"- {item['Pregunta']}: {item['Análisis']} Recomendación: {item['Recomendación']}")
+
+    pdf.ln(5)
+
+    # Respuestas Edulcorantes
     pdf.set_font("Helvetica", 'B', 14)
     pdf.cell(0, 10, "Cuestionario: Frecuencia de Edulcorantes No Calóricos", ln=True)
     pdf.set_font("Helvetica", '', 11)
@@ -279,22 +285,23 @@ def generar_pdf(datos, ias_respuestas, edulcorantes_respuestas):
         pdf.multi_cell(0, 8, f"{pregunta}: {respuesta}")
     pdf.cell(0, 10, f"Puntuación total Edulcorantes: {datos['Puntuación Edulcorantes']} de 24", ln=True)
 
+    pdf.ln(5)
+
+    # Análisis Edulcorantes
+    pdf.set_font("Helvetica", 'B', 13)
+    pdf.cell(0, 10, "Análisis interpretativo Edulcorantes", ln=True)
+    pdf.set_font("Helvetica", '', 10)
+    for item in edulcorantes_analisis:
+        pdf.multi_cell(0, 6, f"- {item['Pregunta']}: {item['Análisis']} Recomendación: {item['Recomendación']}")
+
     pdf.ln(10)
 
     # Pie de página
-    pdf.set_font("Helvetica", 'I', 10)
-    pdf.multi_cell(0, 8, "Este documento forma parte del proyecto de investigación.\n"
+    pdf.set_font("Helvetica", 'I', 9)
+    pdf.multi_cell(0, 6, "Este documento forma parte del proyecto de investigación.\n"
                          "Firma del responsable: ____________________________")
 
-    # Guardar PDF en memoria
-    #buffer = BytesIO()
-    #pdf.output(buffer)
-    #buffer.seek(0)
-    #return buffer
-
-    from io import BytesIO
-
-    # Guardar PDF como bytes
+    # Salida PDF en memoria
     pdf_bytes = pdf.output(dest='S').encode('latin-1')
     buffer = BytesIO(pdf_bytes)
     return buffer
@@ -431,4 +438,15 @@ st.download_button(
     data=csv_analisis,
     file_name="analisis_respuestas_individual.csv",
     mime="text/csv"
+)
+
+
+# 🚦 Genera PDF con análisis interpretativo incluido
+pdf_file = generar_pdf(datos, ias_respuestas, edulcorantes_respuestas, ias_analisis, edulcorantes_analisis)
+
+st.download_button(
+    label="📄 Descargar ficha PDF con análisis",
+    data=pdf_file,
+    file_name="respuestas_cuestionario.pdf",
+    mime="application/pdf"
 )
